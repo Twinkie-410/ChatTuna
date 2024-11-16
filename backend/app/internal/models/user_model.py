@@ -8,3 +8,4 @@ class CustomUser(AbstractUser):
     email = models.EmailField(blank=False, null=True, unique=True)
     is_admin = models.BooleanField(default=False)
     is_verified = models.BooleanField(default=False)
+
