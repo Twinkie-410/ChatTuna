@@ -1,10 +1,12 @@
-from telegram import Update
+from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters
 
 from app.bot.services.user_service import get_or_create, get_user_by_id
 
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await get_permission(update)
+    
     user, _ = await get_or_create(id=update.effective_user.id,
                                   first_name=update.effective_user.first_name,
                                   username=update.effective_user.username,
@@ -12,6 +14,18 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
 
     await update.message.reply_text(text=f'Привет {user.first_name}, я **DEV** бот, если я сломаюсь - не страшно')
 
+async def get_permission(update):
+    reply_keyboard = [["Разрешить"]]
+    
+    await update.message.reply_text(
+        "Здравствуйте! Разрешите использовать данные вашего аккаунта для работы бота",
+        reply_markup=ReplyKeyboardMarkup(
+            reply_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+        ),
+    )
+    # дождаться ответа юзера
+    await update.message
+    
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
@@ -20,6 +34,10 @@ async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> No
 
 async def echo(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Echo the user message."""
+    await update.message.reply_text(
+        "Спасибо!",
+        reply_markup=ReplyKeyboardRemove(),
+    )
     await update.message.reply_text(update.message.text)
 
 
