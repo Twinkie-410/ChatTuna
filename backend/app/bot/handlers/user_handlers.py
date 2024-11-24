@@ -19,11 +19,12 @@ async def start(update: Update, context: CallbackContext) -> int:
 
     return ASK_PERMISSION
 
+
+
 async def create_user(update: ContextTypes.DEFAULT_TYPE, context: CallbackContext):
     user, _ = await get_or_create(id=update.effective_user.id,
                                   first_name=update.effective_user.first_name,
-                                  username=update.effective_user.username,
-                                  chat_id=update.effective_chat.id)
+                                  username=update.effective_user.username)
 
     await update.message.reply_text(text=f'Привет {user.first_name}, я **DEV** бот, если я сломаюсь - не страшно')
 
@@ -52,11 +53,13 @@ async def get_permission(update: Update, context: ContextTypes.DEFAULT_TYPE):
             permission_keyboard, one_time_keyboard=True, resize_keyboard=True, 
         ),
     )
-    
-    return ASK_PERMISSION  
-    
-def cancel(update: Update, context: CallbackContext) -> int:
+
+    return ASK_PERMISSION
+
+
+async def cancel(update: Update, context: CallbackContext) -> int:
     return ConversationHandler.END
+
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
@@ -73,12 +76,10 @@ async def me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = await get_user_by_id(update.message.from_user.id)
     user_data_db = '\n'.join([f'external_id: {user.external_id}',
                               f'first_name: {user.first_name}',
-                              f'username: {user.username}',
-                              f'chat_id: {user.chat_id}'])
+                              f'username: {user.username}'])
     user_data_tg = '\n'.join([f'external_id: {update.effective_user.id}',
                               f'first_name: {update.effective_user.first_name}',
-                              f'username: {update.effective_user.name}',
-                              f'chat_id: {update.effective_chat.id}'])
+                              f'username: {update.effective_user.name}'])
     msg = 'Таким я тебя помню:\n' + user_data_db + '\n\n' + 'Такой ты сейчас\n' + user_data_tg
     await update.message.reply_text(text=msg)
 
