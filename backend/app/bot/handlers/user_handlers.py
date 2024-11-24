@@ -3,14 +3,21 @@ from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters, 
 
 from app.bot.services.user_service import get_or_create, get_user_by_id
 
-ASK_PERMISSION = 1
+ASK_PERMISSION, MAIN_MENU, USER_EVENTS, ALL_EVENTS, BOT_SETTINGS = range(5)
+
+permission_keyboard = [["Разрешить"]]
+menu_keyboard = [["Ваши мероприятия", "Все мероприятия"],["Настройки бота"]]
 
 
 async def start(update: Update, context: CallbackContext) -> int:
-    await update.message.reply_text("Здравствуйте!")
-    permission = await get_permission(update, context)
-    return permission
+    await update.message.reply_text(
+        "Здравствуйте! Разрешите использовать данные вашего аккаунта для работы бота",
+        reply_markup=ReplyKeyboardMarkup(
+            permission_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+        ),
+    )
 
+    return ASK_PERMISSION
 
 async def create_user(update: ContextTypes.DEFAULT_TYPE, context: CallbackContext):
     user, _ = await get_or_create(id=update.effective_user.id,
@@ -19,9 +26,7 @@ async def create_user(update: ContextTypes.DEFAULT_TYPE, context: CallbackContex
 
     await update.message.reply_text(text=f'Привет {user.first_name}, я **DEV** бот, если я сломаюсь - не страшно')
 
-
-async def get_permission(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    reply_keyboard = [["Разрешить"]]
+async def get_permission(update: Update, context: ContextTypes.DEFAULT_TYPE):    
     user_response = update.message.text
 
     if user_response == 'Разрешить':
@@ -31,21 +36,26 @@ async def get_permission(update: Update, context: ContextTypes.DEFAULT_TYPE):
         )
         await create_user(update, context)
 
-        return ConversationHandler.END
+        await update.message.reply_text(
+            "Выберите пункт меню",
+            reply_markup=ReplyKeyboardMarkup(
+                menu_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+            ),
+        )
 
+        return MAIN_MENU
+    
     await update.message.reply_text(
         "Разрешите использовать данные вашего аккаунта для работы бота",
         reply_markup=ReplyKeyboardMarkup(
-            reply_keyboard, one_time_keyboard=True, resize_keyboard=True,
+            permission_keyboard, one_time_keyboard=True, resize_keyboard=True, 
         ),
     )
-
-    return ASK_PERMISSION
-
-
-async def cancel(update: Update, context: CallbackContext) -> int:
+    
+    return ASK_PERMISSION  
+    
+def cancel(update: Update, context: CallbackContext) -> int:
     return ConversationHandler.END
-
 
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Send a message when the command /help is issued."""
@@ -69,15 +79,42 @@ async def me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     msg = 'Таким я тебя помню:\n' + user_data_db + '\n\n' + 'Такой ты сейчас\n' + user_data_tg
     await update.message.reply_text(text=msg)
 
+async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):    
+    user_response = update.message.text
 
-# start_handler = CommandHandler('start', start)
-permission_handler = ConversationHandler(
-    entry_points=[CommandHandler("start", start)],
-    states={
-        ASK_PERMISSION: [MessageHandler(filters.TEXT & (~filters.COMMAND), get_permission)]
-    },
-    fallbacks=[CommandHandler('cancel', cancel)]
-)
+    match user_response:
+        case "Ваши мероприятия":
+            await update.message.reply_text("user")
+            return USER_EVENTS
+        case "Все мероприятия":
+            await update.message.reply_text("all!")
+            return ALL_EVENTS
+        case "Настройки бота":
+            await update.message.reply_text("sett!")
+            return BOT_SETTINGS
+        case _:
+            return MAIN_MENU
+
+async def user_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    return MAIN_MENU
+
+async def all_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    return MAIN_MENU
+
+async def bot_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    return MAIN_MENU
+
 personal_info_handler = CommandHandler('me', me)
 echo_handler = MessageHandler(filters.TEXT & (~filters.COMMAND), echo)
 help_handler = CommandHandler('help', help_command)
+conversation_handler = ConversationHandler(
+        entry_points=[CommandHandler("start", start)],
+        states={
+            ASK_PERMISSION: [MessageHandler(filters.TEXT & (~filters.COMMAND), get_permission)],
+            MAIN_MENU: [MessageHandler(filters.TEXT & (~filters.COMMAND), main_menu)],
+            USER_EVENTS: [MessageHandler(filters.TEXT & (~filters.COMMAND), user_events)],
+            ALL_EVENTS: [MessageHandler(filters.TEXT & (~filters.COMMAND), all_events)],
+            BOT_SETTINGS: [MessageHandler(filters.TEXT & (~filters.COMMAND), bot_settings)],
+        },
+        fallbacks=[CommandHandler('cancel', cancel)]
+    )
