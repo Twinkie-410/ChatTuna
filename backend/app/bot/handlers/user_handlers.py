@@ -3,11 +3,14 @@ from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters, 
 
 from app.bot.services.user_service import get_or_create, get_user_by_id
 
-ASK_PERMISSION, MAIN_MENU, USER_EVENTS, ALL_EVENTS, BOT_SETTINGS = range(5)
+ASK_PERMISSION, MAIN_MENU, USER_EVENTS, ALL_EVENTS, BOT_SETTINGS, CANCEL_REGISTRATION = range(6)
 
 permission_keyboard = [["Разрешить"]]
 menu_keyboard = [["Ваши мероприятия", "Все мероприятия"],["Настройки бота"]]
 settings_keyboard = [["Я хочу получать рассылку", "Выйти"]]
+user_events_info_keyboard = [["Посмотреть подробную информацию"], ["Назад"]]
+user_events_cancel_keyboard = [["Отменить регистрацию"], ["Назад"]]
+
 
 async def start(update: Update, context: CallbackContext) -> int:
     await update.message.reply_text(
@@ -84,7 +87,13 @@ async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     match user_response:
         case "Ваши мероприятия":
-            await update.message.reply_text("user")
+            await update.message.reply_text("Список ваших мероприятий: #список с бд#")
+            await update.message.reply_text(
+                "Желаете посмореть подробную информацию?",
+                reply_markup=ReplyKeyboardMarkup(
+                    user_events_info_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+                ),
+            )
             return USER_EVENTS
         case "Все мероприятия":
             await update.message.reply_text("all!")
@@ -100,7 +109,46 @@ async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
         case _:
             return MAIN_MENU
 
-async def user_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def user_events(update: Update, context: ContextTypes.DEFAULT_TYPE): 
+    user_response = update.message.text
+
+    if user_response == 'Посмотреть подробную информацию':
+        await update.message.reply_text(
+            "Выберите мероприятие:#какие-то меро#",
+            reply_markup=ReplyKeyboardRemove(),
+        )
+        await update.message.reply_text(
+            "Желаете отменить регистрацию?",
+            reply_markup=ReplyKeyboardMarkup(
+                user_events_cancel_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+            ),
+        )
+        return CANCEL_REGISTRATION
+    
+    await update.message.reply_text(
+        "Выберите пункт меню",
+        reply_markup=ReplyKeyboardMarkup(
+            menu_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+        ),
+    )
+    
+    return MAIN_MENU
+
+async def user_events_cancel_registration(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_response = update.message.text
+
+    if user_response == 'Отменить регистрацию':
+        await update.message.reply_text(
+            "Регистрация на #меро# отменена",
+            reply_markup=ReplyKeyboardRemove(),
+        )
+    
+    await update.message.reply_text(
+        "Выберите пункт меню",
+        reply_markup=ReplyKeyboardMarkup(
+            menu_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+        ),
+    )
     return MAIN_MENU
 
 async def all_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -136,6 +184,7 @@ conversation_handler = ConversationHandler(
             USER_EVENTS: [MessageHandler(filters.TEXT & (~filters.COMMAND), user_events)],
             ALL_EVENTS: [MessageHandler(filters.TEXT & (~filters.COMMAND), all_events)],
             BOT_SETTINGS: [MessageHandler(filters.TEXT & (~filters.COMMAND), bot_settings)],
+            CANCEL_REGISTRATION: [MessageHandler(filters.TEXT & (~filters.COMMAND), user_events_cancel_registration)],
         },
         fallbacks=[CommandHandler('cancel', cancel)]
     )
