@@ -10,7 +10,7 @@ menu_keyboard = [["Ваши мероприятия", "Все мероприят�
 settings_keyboard = [["Я хочу получать рассылку", "Выйти"]]
 user_events_info_keyboard = [["Посмотреть подробную информацию"], ["Назад"]]
 user_events_cancel_keyboard = [["Отменить регистрацию"], ["Назад"]]
-
+all_events_register_keyboard = [["Зарегистрироваться"], ["Назад"]]
 
 async def start(update: Update, context: CallbackContext) -> int:
     await update.message.reply_text(
@@ -96,7 +96,14 @@ async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             )
             return USER_EVENTS
         case "Все мероприятия":
-            await update.message.reply_text("all!")
+            await update.message.reply_text("Список всех мероприятий: #список с бд#")
+            await update.message.reply_text("Выберите мероприятие: #выбрал#")
+            await update.message.reply_text(
+                "Желаете зарегистрироваться на данное мероприятие?",
+                reply_markup=ReplyKeyboardMarkup(
+                    all_events_register_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+                ),
+            )
             return ALL_EVENTS
         case "Настройки бота":
             await update.message.reply_text(
@@ -152,6 +159,20 @@ async def user_events_cancel_registration(update: Update, context: ContextTypes.
     return MAIN_MENU
 
 async def all_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_response = update.message.text
+
+    if user_response == 'Зарегистрироваться':
+        await update.message.reply_text(
+            "Вы зарегистрировались на #меро#",
+            reply_markup=ReplyKeyboardRemove(),
+        )
+    
+    await update.message.reply_text(
+        "Выберите пункт меню",
+        reply_markup=ReplyKeyboardMarkup(
+            menu_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+        ),
+    )
     return MAIN_MENU
 
 async def bot_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
