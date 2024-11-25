@@ -7,7 +7,7 @@ ASK_PERMISSION, MAIN_MENU, USER_EVENTS, ALL_EVENTS, BOT_SETTINGS = range(5)
 
 permission_keyboard = [["Разрешить"]]
 menu_keyboard = [["Ваши мероприятия", "Все мероприятия"],["Настройки бота"]]
-
+settings_keyboard = [["Я хочу получать рассылку", "Выйти"]]
 
 async def start(update: Update, context: CallbackContext) -> int:
     await update.message.reply_text(
@@ -22,8 +22,7 @@ async def start(update: Update, context: CallbackContext) -> int:
 async def create_user(update: ContextTypes.DEFAULT_TYPE, context: CallbackContext):
     user, _ = await get_or_create(id=update.effective_user.id,
                                   first_name=update.effective_user.first_name,
-                                  username=update.effective_user.username,
-                                  chat_id=update.effective_chat.id)
+                                  username=update.effective_user.username)
 
     await update.message.reply_text(text=f'Привет {user.first_name}, я **DEV** бот, если я сломаюсь - не страшно')
 
@@ -73,16 +72,14 @@ async def me(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     user = await get_user_by_id(update.message.from_user.id)
     user_data_db = '\n'.join([f'external_id: {user.external_id}',
                               f'first_name: {user.first_name}',
-                              f'username: {user.username}',
-                              f'chat_id: {user.chat_id}'])
+                              f'username: {user.username}',])
     user_data_tg = '\n'.join([f'external_id: {update.effective_user.id}',
                               f'first_name: {update.effective_user.first_name}',
-                              f'username: {update.effective_user.name}',
-                              f'chat_id: {update.effective_chat.id}'])
+                              f'username: {update.effective_user.name}'])
     msg = 'Таким я тебя помню:\n' + user_data_db + '\n\n' + 'Такой ты сейчас\n' + user_data_tg
     await update.message.reply_text(text=msg)
 
-async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):    
+async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_response = update.message.text
 
     match user_response:
@@ -93,7 +90,12 @@ async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
             await update.message.reply_text("all!")
             return ALL_EVENTS
         case "Настройки бота":
-            await update.message.reply_text("sett!")
+            await update.message.reply_text(
+                "Вы хотите получать рассылку?",
+                reply_markup=ReplyKeyboardMarkup(
+                    settings_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+                ),
+            )   
             return BOT_SETTINGS
         case _:
             return MAIN_MENU
@@ -105,6 +107,21 @@ async def all_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
     return MAIN_MENU
 
 async def bot_settings(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_response = update.message.text
+
+    if user_response == 'Я хочу получать рассылку':
+        await update.message.reply_text(
+            "Настройки изменены",
+            reply_markup=ReplyKeyboardRemove(),
+        )
+    
+    await update.message.reply_text(
+        "Выберите пункт меню",
+        reply_markup=ReplyKeyboardMarkup(
+            menu_keyboard, one_time_keyboard=True, resize_keyboard=True, 
+        ),
+    )
+    
     return MAIN_MENU
 # start_handler = CommandHandler('start', start)
 
