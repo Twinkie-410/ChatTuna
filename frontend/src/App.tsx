@@ -4,6 +4,7 @@ import Login from './components/pages/Login';
 import Profile from './components/pages/Profile';
 import PrivateRoutes from './utils/PrivateRoutes';
 import {LoginGuard} from './hocs/LoginGuard';
+import CreateEvent from './components/pages/CreateEvent';
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
           {/* <Route element={<PrivateRoutes/>}> */}
             <Route path='/' element={<Main />} />
             <Route path='/profile' element={<Profile />} />
-            
+            <Route path='/createEvent' element={<CreateEvent />} />
           {/* </Route> */}
         {/* </Route> */}
       </Routes>
