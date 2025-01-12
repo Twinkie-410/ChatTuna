@@ -13,3 +13,4 @@ migrations/
 /backend/.env
 /backend/.venv
 vscode.env
+/frontend/node_modules/

@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+}
+
+.react-datepicker__input-container .react-datepicker__calendar-icon {
+  width: 27px;
+  height: 27px;
+}
+
+.react-datepicker__input-container  {
+  display: flex;
+  flex-direction: row;
+  justify-content: right;
+  align-items: center;
+}
+
+.react-datepicker__input-container input{
+  padding: 8px 22px 8px 22px;
+}
