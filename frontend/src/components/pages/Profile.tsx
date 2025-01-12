@@ -34,10 +34,10 @@ function Profile({user}:ProfileProps) {
                     <div className="p-[15px]">
                         <div className="flex flex-col px-[38px] gap-[30px] pt-[41px] bg-[#FFFFFF] rounded-md">
                             <div className="text-[24px] font-bold">
-                                {user.first_name? user.first_name: 'Ошибка'} {user.last_name? user.last_name: 'Ошибка'}
+                                {user.first_name? user.first_name: 'Иван'} {user.last_name? user.last_name: 'Иванов'}
                             </div>
                             <div className="">
-                                Почта: {user.email}
+                                Почта: {user.email? user.email: 'example@gmail.com'}
                             </div> 
                             <div className="flex pb-[40px] mt-[41px] items-center gap-[90px]">
                                 <div className="flex gap-[20px]">

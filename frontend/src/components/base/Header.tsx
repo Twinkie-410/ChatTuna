@@ -35,16 +35,16 @@ function Header({first_name, last_name}: HeaderProps) {
                         <svg width="1" height="33" viewBox="0 0 1 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="0.5" x2="0.5" y2="33" stroke="white"/>
                         </svg>
-                        <NavLink to={'/createCalculation'} className="hover:text-[#97989A]">
+                        <NavLink to={'/configureBot'} className="hover:text-[#97989A]">
                             Конфигуратор бота
                         </NavLink>
                     </div>
                     <NavLink to={'/profile'} className="flex flex-row gap-[15px] hover:text-[#97989A]">
                         <div className="">
-                            {first_name? first_name: 'Ошибка'}
+                            {first_name? first_name: 'Иван'}
                         </div>
                         <div className="">
-                            {last_name? last_name : 'Ошибка'}
+                            {last_name? last_name : 'Иванов'}
                         </div>
                         <svg width="37" height="36" viewBox="0 0 37 36" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <ellipse cx="17.7693" cy="10.1508" rx="11.9538" ry="10.1508" fill="#FBFAFA"/>
