@@ -6,7 +6,11 @@ from django.conf import settings
 # https://pypi.org/project/django-cors-headers/
 # CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS").split()
 
-REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",)}
+REST_FRAMEWORK = {"DEFAULT_AUTHENTICATION_CLASSES": ("rest_framework_simplejwt.authentication.JWTAuthentication",),
+                  'DEFAULT_PERMISSION_CLASSES': [
+                      'rest_framework.permissions.IsAuthenticated',
+                  ]
+                  }
 
 # https://drf-yasg.readthedocs.io/en/stable/readme.html
 SWAGGER_SETTINGS = {

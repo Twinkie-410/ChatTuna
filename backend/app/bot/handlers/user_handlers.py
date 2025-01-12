@@ -96,6 +96,7 @@ async def main_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
     match user_response:
         case "Ваши мероприятия":
             events = await get_event_by_user(update.effective_user.id)
+            # todo метод для отправки сообщения с фото и без фото
             events_pretty = to_list_string_pretty(events)
             await update.message.reply_text(f"Список ваших мероприятий:\n{events_pretty}")
             await update.message.reply_text(
