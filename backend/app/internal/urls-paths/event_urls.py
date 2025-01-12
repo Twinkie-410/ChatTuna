@@ -1,9 +1,3 @@
-# crud меро
-# получение списка пользователей по меро
-# получение списка пользователей
-# уведомления/сообщения от администрации
-
-
 from django.urls import path
 
 from app.internal.views.event_view import EventListAPIView, EventCreateAPIView, EventDetailAPIView, EventUsersAPIView
