@@ -2,6 +2,8 @@ from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, constants
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters, ConversationHandler, CallbackContext
 
 from app.bot.services.event_service import get_all_events, get_event_by_user
+from app.bot.services.image_service import get_image_by_event
+from app.bot.services.sender_message_service import reply_event
 from app.bot.services.user_service import get_or_create, get_user_by_id
 from app.bot.utils.pretty import to_list_string_pretty, event_to_string_pretty
 
@@ -166,8 +168,7 @@ async def user_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return USER_EVENTS
 
     context.user_data["select_event"] = event
-    await update.message.reply_text(event_to_string_pretty(event),
-                                    parse_mode=constants.ParseMode.HTML)
+    await reply_event(update=update, event=event)
     await update.message.reply_text(
         "Желаете отменить регистрацию?",
         reply_markup=ReplyKeyboardMarkup(
@@ -202,6 +203,12 @@ async def all_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_response = update.message.text
 
     if user_response == "Назад":
+        await update.message.reply_text(
+            "Выберите пункт меню",
+            reply_markup=ReplyKeyboardMarkup(
+                menu_keyboard, one_time_keyboard=True, resize_keyboard=True,
+            ),
+        )
         return MAIN_MENU
 
     events = await get_all_events()
@@ -226,9 +233,7 @@ async def all_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return ALL_EVENTS
 
     context.user_data["select_event"] = event
-    await update.message.reply_text(event_to_string_pretty(event),
-                                    parse_mode=constants.ParseMode.HTML)
-
+    await reply_event(update=update, event=event)
     await update.message.reply_text(
         "Желаете зарегистрироваться на данное мероприятие?",
         reply_markup=ReplyKeyboardMarkup(
@@ -247,8 +252,8 @@ async def registration(update: Update, context: ContextTypes.DEFAULT_TYPE):
         user = await get_user_by_id(update.effective_user.id)
         await event.users.aadd(user, through_defaults={'subscribe': True})
         await update.message.reply_text(
-            f"Вы зарегистрировались на **{event.name}**",
-            parse_mode=constants.ParseMode.MARKDOWN_V2,
+            f"Вы зарегистрировались на <b>{event.name}</b>",
+            parse_mode=constants.ParseMode.HTML,
             reply_markup=ReplyKeyboardRemove(),
         )
 
