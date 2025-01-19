@@ -8,6 +8,7 @@ from app.internal.serializers.tguser_serializer import TGUserSerializer
 
 class EventSerializer(serializers.ModelSerializer):
     image_detail = ImageSerializer(source="image", read_only=True)
+    free_places = serializers.IntegerField(source="free_places_annotate")
 
     class Meta:
         model = Event

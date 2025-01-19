@@ -19,8 +19,8 @@ async def reply_event(update: Update, event: Event):
     if image_object:
         image = image_object.image
         return await update.message.reply_photo(photo=image,
-                                                caption=event_to_string_pretty(event),
+                                                caption=await event_to_string_pretty(event),
                                                 parse_mode=constants.ParseMode.HTML)
     else:
-        return await update.message.reply_text(text=event_to_string_pretty(event),
+        return await update.message.reply_text(text=await event_to_string_pretty(event),
                                                parse_mode=constants.ParseMode.HTML)

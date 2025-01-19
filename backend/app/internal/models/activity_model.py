@@ -12,7 +12,7 @@ class Activity(models.Model):
     description = models.TextField()
     organizer = models.CharField(max_length=255)
     places = models.PositiveIntegerField()
-    free_places = models.PositiveIntegerField()
+    # free_places = models.PositiveIntegerField()
 
     def __str__(self):
         return f"{self.id}"
