@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react"
 import { customFetchBase } from "./customFetchBase"
-import { IAdmin } from "../../models/IAuth"
+import { IAdmin, ITgUser } from "../../models/IAuth"
 import { tokenService } from "../../services/TokenService"
 
 
@@ -16,9 +16,16 @@ export const UsersAPI = createApi({
                 headers: {'Bearer' : `${tokenService.getLocalAccessToken()}`}
            }) 
         }),
+        loadTgUsers: build.query<ITgUser, void>({
+            query: () => ({
+                url: `${url}/list/`,
+                headers: {'Bearer' : `${tokenService.getLocalAccessToken()}`}
+           }) 
+        })
     })
 })
 
 export const {
-    useLoadMyProfileQuery
+    useLoadMyProfileQuery,
+    useLoadTgUsersQuery
 } = UsersAPI

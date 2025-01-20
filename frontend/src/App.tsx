@@ -11,15 +11,15 @@ function App() {
   return (
     <>
       <Routes>
-        {/* <Route element={<LoginGuard/>}> */}
+        <Route element={<LoginGuard/>}>
           <Route path='/login' element={<Login />} />
-          {/* <Route element={<PrivateRoutes/>}> */}
+          <Route element={<PrivateRoutes/>}>
             <Route path='/' element={<Main />} />
             <Route path='/profile' element={<Profile />} />
             <Route path='/createEvent' element={<CreateEvent />} />
             <Route path='/configureBot' element={<ConfigureBot />} />
-          {/* </Route> */}
-        {/* </Route> */}
+          </Route>
+        </Route>
       </Routes>
     
     </>
