@@ -4,6 +4,7 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import { UsersAPI } from './apis/UserAPI';
 import { NotificationAPI } from './apis/NotificationsAPI';
 import { ImageAPI } from './apis/ImageAPI';
+import { EventAPI } from './apis/EventAPI';
 
 
 const rootReducer = combineReducers({
@@ -11,7 +12,8 @@ const rootReducer = combineReducers({
     [AuthAPI.reducerPath]: AuthAPI.reducer,
     [UsersAPI.reducerPath]: UsersAPI.reducer,
     [NotificationAPI.reducerPath]: NotificationAPI.reducer,
-    [ImageAPI.reducerPath]: ImageAPI.reducer
+    [ImageAPI.reducerPath]: ImageAPI.reducer,
+    [EventAPI.reducerPath]: EventAPI.reducer
 })
 
 export const setupStore = () => {
@@ -22,7 +24,8 @@ export const setupStore = () => {
                 AuthAPI.middleware, 
                 UsersAPI.middleware,
                 NotificationAPI.middleware,
-                ImageAPI.middleware
+                ImageAPI.middleware,
+                EventAPI.middleware
                 ),
     })
 }
