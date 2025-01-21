@@ -1,17 +1,10 @@
 import { useNavigate } from "react-router-dom"
+import { IEvent } from "../../models/IEvent";
 
-interface ObjectCardProps {
-    date: string;
-    name: string;
-    address: string;
-    organizer: string;
-    places: number;
-    free_places: number;
-    index: number;
-}
+interface ObjectCardProps extends IEvent {}
 
 
-function ObjectCard({name, date, address, organizer, free_places, places}: ObjectCardProps) {
+function ObjectCard({name, datetime_start, address, organizer, free_places, places}: ObjectCardProps) {
 
     const navigate = useNavigate()
     // const handleClick = () => {
@@ -42,16 +35,16 @@ function ObjectCard({name, date, address, organizer, free_places, places}: Objec
                         </ul>
                         <ul className="bg-[#FFFFFF] rounded-md px-1">
                             <li>
-                                <span>{name}</span>
+                                <span>{name? name: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{date.toString()}</span>
+                                <span>{datetime_start? datetime_start: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{address}</span>
+                                <span>{address? address: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{organizer}</span>
+                                <span>{organizer? organizer: 'Нет данных'}</span>
                             </li>
                             <li>
                                 <span>{free_places}/{places}</span>

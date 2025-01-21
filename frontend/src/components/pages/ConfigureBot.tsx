@@ -8,7 +8,7 @@ function ConfigureBot() {
         <div className="min-h-[100vh] h-[100vh] flex flex-col">
             <Header/>
             <div className="max-w-[1320px] mx-auto mt-[20px] flex-grow">
-                <h1 className="text-[24px] mt-[28px]">Создать мероприятие</h1>
+                <h1 className="text-[24px] mt-[28px]">Конфигуратор бота</h1>
                 <div className="flex justify-between gap-[80px] mt-[60px]">
                     <div className="">
                         <ul className="flex flex-col gap-[20px] text-[20px]">

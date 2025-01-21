@@ -1,3 +1,4 @@
+import { useGetEventsListQuery } from "../../store/apis/EventAPI";
 import { useLoadMyProfileQuery } from "../../store/apis/UserAPI";
 import Footer from "../base/Footer";
 import Header from "../base/Header";
@@ -7,6 +8,7 @@ import ObjectCard from "../elements/ObjectCard";
 function Main() {
 
     useLoadMyProfileQuery()
+    const events = useGetEventsListQuery().data
     
     return (
         <div className="min-h-[100vh] h-[100vh] flex flex-col">
@@ -17,7 +19,7 @@ function Main() {
                     <Search/>
                 </div>
                 <div className="flex flex-row flex-wrap justify-between">
-                    <ObjectCard
+                    {/* <ObjectCard
                         date={'01.01.2025'}
                         name="Фестиваль талантов"
                         address="г. Екатеринбург, ул. Мира, д. 19"
@@ -43,7 +45,14 @@ function Main() {
                         places={150}
                         free_places={30}
                         index={1}
-                    />
+                    /> */}
+                    {events && events.slice(0).reverse().map((e, index) => (
+                        <ObjectCard
+                            {...e}
+                            // index={index}
+                            key={e.id}
+                            />                        
+                    ))}
                 </div>
             </div>
             <Footer/>
