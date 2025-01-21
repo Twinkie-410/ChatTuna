@@ -11,6 +11,7 @@ export const EventAPI = createApi({
         createEvent: build.mutation<IEvent, IRegistrationEvent>({
             query: (args) => ({
                 url: `${url}/create/`,
+                method:'POST',
                 body: args
            }) 
         }),
