@@ -1,3 +1,4 @@
+from rest_framework import parsers
 from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView, ListAPIView
 
 from app.internal.mixins.AnnotatedEventMixin import AnnotatedEventMixin
@@ -13,6 +14,7 @@ class EventListAPIView(AnnotatedEventMixin, ListAPIView):
 
 class EventCreateAPIView(CreateAPIView):
     serializer_class = EventSerializer
+    parser_classes = [parsers.MultiPartParser]
 
 
 class EventDetailAPIView(AnnotatedEventMixin, RetrieveUpdateDestroyAPIView):

@@ -15,10 +15,8 @@ async def send_message(user_id, msg):
 
 
 async def reply_event(update: Update, event: Event):
-    image_object = await get_image_by_event(event)
-    if image_object:
-        image = image_object.image
-        return await update.message.reply_photo(photo=image,
+    if event.image:
+        return await update.message.reply_photo(photo=event.image,
                                                 caption=await event_to_string_pretty(event),
                                                 parse_mode=constants.ParseMode.HTML)
     else:

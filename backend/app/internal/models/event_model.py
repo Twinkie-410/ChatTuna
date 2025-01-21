@@ -4,6 +4,10 @@ from app.internal.models.image_model import Image
 from app.internal.models.tg_user_model import TGUser
 
 
+def upload_image(instance: "Event", filename: str):
+    return f"{instance.name}/{instance.name}.{filename.split('.')[-1]}"
+
+
 class Event(models.Model):
     users = models.ManyToManyField(TGUser, through="RegistrationEvent")
     name = models.CharField(max_length=255)
@@ -11,7 +15,8 @@ class Event(models.Model):
     datetime_end = models.DateTimeField()
     address = models.CharField(max_length=255, blank=True)
     description = models.TextField(blank=True)
-    image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True, blank=True)
+    # image = models.ForeignKey(Image, on_delete=models.SET_NULL, null=True, blank=True)
+    image = models.ImageField(upload_to=upload_image, null=True, blank=True, verbose_name="изображение")
     organizer = models.CharField(max_length=255)
     contacts = models.CharField(max_length=255)
     places = models.PositiveIntegerField()
@@ -23,6 +28,7 @@ class Event(models.Model):
 
     class Meta:
         verbose_name = "Мероприятие"
+        verbose_name_plural = "Мероприятия"
 
     @property
     async def booked_places(self):
