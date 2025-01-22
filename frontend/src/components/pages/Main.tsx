@@ -19,39 +19,11 @@ function Main() {
                     <Search/>
                 </div>
                 <div className="flex flex-row flex-wrap justify-between">
-                    {/* <ObjectCard
-                        date={'01.01.2025'}
-                        name="Фестиваль талантов"
-                        address="г. Екатеринбург, ул. Мира, д. 19"
-                        organizer={'УКНО'}
-                        places={150}
-                        free_places={30}
-                        index={1}
-                    />
-                    <ObjectCard
-                        date={'01.01.2025'}
-                        name="Фестиваль талантов"
-                        address="г. Екатеринбург, ул. Мира, д. 19"
-                        organizer={'УКНО'}
-                        places={150}
-                        free_places={30}
-                        index={1}
-                    />
-                    <ObjectCard
-                        date={'01.01.2025'}
-                        name="Фестиваль талантов"
-                        address="г. Екатеринбург, ул. Мира, д. 19"
-                        organizer={'УКНО'}
-                        places={150}
-                        free_places={30}
-                        index={1}
-                    /> */}
                     {events && events.slice(0).reverse().map((e, index) => (
                         <ObjectCard
                             {...e}
-                            // index={index}
                             key={e.id}
-                            />                        
+                        />                        
                     ))}
                 </div>
             </div>
