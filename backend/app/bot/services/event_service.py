@@ -23,5 +23,9 @@ async def get_event_by_id(id):
     return await Event.objects.filter(id=id).afirst()
 
 
+async def get_registration_by_event_and_user(user_id, event_id):
+    return await RegistrationEvent.objects.filter(user__external_id=user_id, event__id=event_id).afirst()
+
+
 async def get_all_activity():
     return [activity async for activity in Activity.objects.filter(datetime_start__gte=datetime.datetime.now()).all()]

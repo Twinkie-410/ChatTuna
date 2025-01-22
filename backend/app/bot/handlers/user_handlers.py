@@ -1,19 +1,19 @@
 from telegram import Update, ReplyKeyboardMarkup, ReplyKeyboardRemove, constants
 from telegram.ext import ContextTypes, CommandHandler, MessageHandler, filters, ConversationHandler, CallbackContext
 
-from app.bot.services.event_service import get_all_events, get_event_by_user
-from app.bot.services.image_service import get_image_by_event
+from app.bot.services.event_service import get_all_events, get_event_by_user, get_registration_by_event_and_user
 from app.bot.services.sender_message_service import reply_event
 from app.bot.services.user_service import get_or_create, get_user_by_id
-from app.bot.utils.pretty import to_list_string_pretty, event_to_string_pretty
+from app.bot.utils.pretty import to_list_string_pretty
 
-ASK_PERMISSION, MAIN_MENU, USER_EVENTS, ALL_EVENTS, BOT_SETTINGS, REGISTRATION, CANCEL_REGISTRATION = range(7)
+ASK_PERMISSION, MAIN_MENU, USER_EVENTS, ALL_EVENTS, BOT_SETTINGS, REGISTRATION, CANCEL_REGISTRATION, UPLOAD_SUBMISSION = range(
+    8)
 
 permission_keyboard = [["Разрешить"]]
 menu_keyboard = [["Ваши мероприятия", "Все мероприятия"], ["Настройки бота"]]
 settings_keyboard = [["Я хочу получать рассылку", "Выйти"]]
 user_events_info_keyboard = [["Посмотреть подробную информацию"], ["Назад"]]
-user_events_cancel_keyboard = [["Отменить регистрацию"], ["Назад"]]
+user_events_keyboard = [["Отменить регистрацию", "Загрузить"], ["Назад"]]
 all_events_register_keyboard = [["Зарегистрироваться"], ["Назад"]]
 
 
@@ -170,33 +170,78 @@ async def user_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
     context.user_data["select_event"] = event
     await reply_event(update=update, event=event)
     await update.message.reply_text(
-        "Желаете отменить регистрацию?",
+        "Желаете отменить регистрацию или загрузить работу для конкурса?",
         reply_markup=ReplyKeyboardMarkup(
-            user_events_cancel_keyboard, one_time_keyboard=True, resize_keyboard=True,
+            user_events_keyboard, one_time_keyboard=True, resize_keyboard=True,
         ),
     )
     return CANCEL_REGISTRATION
 
 
-async def user_events_cancel_registration(update: Update, context: ContextTypes.DEFAULT_TYPE):
+async def user_events_cancel_or_upload(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_response = update.message.text
+    event = context.user_data.get('select_event')
+    user = await get_user_by_id(update.effective_user.id)
 
-    if user_response == 'Отменить регистрацию':
+    match user_response:
+        case 'Отменить регистрацию':
+            await event.users.aremove(user)
+            await update.message.reply_text(
+                f"Регистрация на **{event.name}** отменена",
+                reply_markup=ReplyKeyboardRemove(),
+            )
+
+            await update.message.reply_text(
+                "Выберите пункт меню",
+                reply_markup=ReplyKeyboardMarkup(
+                    menu_keyboard, one_time_keyboard=True, resize_keyboard=True,
+                ),
+            )
+            return MAIN_MENU
+
+        case "Загрузить":
+            registration = await get_registration_by_event_and_user(user_id=user.external_id, event_id=event.id)
+            if registration.submission:
+                await update.message.reply_text(
+                    f'Сейчас прикреплена работа: {registration.submission}\nВы можете отправить другую ссылку на работу'
+                )
+            else:
+                await update.message.reply_text(
+                    f'Приложите ссылку на работу, чтобы отправить её на конкурс'
+                )
+            await update.message.reply_text(
+                "Назад",
+                reply_markup=ReplyKeyboardMarkup(
+                    [["Назад"]], one_time_keyboard=True, resize_keyboard=True,
+                ),
+            )
+            return UPLOAD_SUBMISSION
+
+
+async def upload_submission(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    user_response = update.message.text
+    if user_response == "Назад":
+        await update.message.reply_text(
+            "Выберите пункт меню",
+            reply_markup=ReplyKeyboardMarkup(
+                menu_keyboard, one_time_keyboard=True, resize_keyboard=True,
+            ),
+        )
+        return MAIN_MENU
+    else:
         event = context.user_data.get('select_event')
         user = await get_user_by_id(update.effective_user.id)
-        await event.users.aremove(user)
+        registration = await get_registration_by_event_and_user(user_id=user.external_id, event_id=event.id)
+        registration.submission = user_response
+        await registration.asave()
+        await update.message.reply_text("Ваша работа загружена")
         await update.message.reply_text(
-            f"Регистрация на **{event.name}** отменена",
-            reply_markup=ReplyKeyboardRemove(),
+            "Выберите пункт меню",
+            reply_markup=ReplyKeyboardMarkup(
+                menu_keyboard, one_time_keyboard=True, resize_keyboard=True,
+            ),
         )
-
-    await update.message.reply_text(
-        "Выберите пункт меню",
-        reply_markup=ReplyKeyboardMarkup(
-            menu_keyboard, one_time_keyboard=True, resize_keyboard=True,
-        ),
-    )
-    return MAIN_MENU
+        return MAIN_MENU
 
 
 async def all_events(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -299,7 +344,8 @@ conversation_handler = ConversationHandler(
         ALL_EVENTS: [MessageHandler(filters.TEXT & (~filters.COMMAND), all_events)],
         BOT_SETTINGS: [MessageHandler(filters.TEXT & (~filters.COMMAND), bot_settings)],
         REGISTRATION: [MessageHandler(filters.TEXT & (~filters.COMMAND), registration)],
-        CANCEL_REGISTRATION: [MessageHandler(filters.TEXT & (~filters.COMMAND), user_events_cancel_registration)],
+        CANCEL_REGISTRATION: [MessageHandler(filters.TEXT & (~filters.COMMAND), user_events_cancel_or_upload)],
+        UPLOAD_SUBMISSION: [MessageHandler(filters.TEXT & (~filters.COMMAND), upload_submission)],
     },
     fallbacks=[CommandHandler('cancel', cancel)]
 )

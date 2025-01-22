@@ -3,8 +3,8 @@ from rest_framework.generics import RetrieveUpdateDestroyAPIView, CreateAPIView,
 from app.internal.mixins.AnnotatedEventMixin import AnnotatedEventMixin
 from app.internal.models.event_model import Event
 from app.internal.models.registration_event_model import RegistrationEvent
-from app.internal.serializers.event_serializer import EventSerializer, RegistrationEventSerializer
-from django.db.models import Count, F
+from app.internal.serializers.event_serializer import EventSerializer, RegistrationEventSerializer, \
+    EventSubmissionSerializer
 
 
 class EventListAPIView(AnnotatedEventMixin, ListAPIView):
@@ -23,6 +23,16 @@ class EventDetailAPIView(AnnotatedEventMixin, RetrieveUpdateDestroyAPIView):
 
 class EventUsersAPIView(ListAPIView):
     serializer_class = RegistrationEventSerializer
+
+    def get_queryset(self):
+        event = Event.objects.filter(id=self.kwargs["id"]).first()
+        if event:
+            return RegistrationEvent.objects.filter(event=event)
+        return
+
+
+class EventSubmissionAPIView(ListAPIView):
+    serializer_class = EventSubmissionSerializer
 
     def get_queryset(self):
         event = Event.objects.filter(id=self.kwargs["id"]).first()

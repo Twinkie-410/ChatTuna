@@ -7,6 +7,7 @@ from app.internal.models.event_model import Event
 class RegistrationEvent(models.Model):
     user = models.ForeignKey(TGUser, on_delete=models.CASCADE)
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    submission = models.CharField(max_length=255, default="")
     subscribe = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

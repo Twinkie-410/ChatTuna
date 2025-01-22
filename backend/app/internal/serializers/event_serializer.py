@@ -23,3 +23,12 @@ class RegistrationEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = RegistrationEvent
         fields = "__all__"
+
+
+class EventSubmissionSerializer(serializers.ModelSerializer):
+    event_name = serializers.CharField(source="event.name", read_only=True)
+    user_name = serializers.CharField(source="user.first_name", read_only=True)
+
+    class Meta:
+        model = RegistrationEvent
+        fields = ["id", "event_name", "user_name", "submission"]
