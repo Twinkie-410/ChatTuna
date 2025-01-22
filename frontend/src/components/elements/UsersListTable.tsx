@@ -21,6 +21,7 @@ function UsersListTable(data : Props) {
                         index={index}
                         username={e.user?.username} // Используем опциональную цепочку
                         firstName={e.user?.first_name} // Используем опциональную цепочку
+                        submission={e.submission}
                     />
                 ) : null
             ))}
