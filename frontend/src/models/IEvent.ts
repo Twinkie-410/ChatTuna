@@ -1,3 +1,4 @@
+import { ITgUser } from "./IAuth"
 import { IEventImageDetail, IEventRegisterImageDetail } from "./IImage"
 
 export type IRegistrationEvent = {
@@ -18,4 +19,14 @@ export interface IEvent extends Omit<IRegistrationEvent, 'image_detail'> {
     id?: number
     image_detail?: IEventImageDetail
     users?: number
+}
+
+export interface IEventGetUsers {
+    id?: number
+    event_name?: string
+    user?: ITgUser
+    subcribe?: boolean
+    created_at?: string
+    updated_at?: string
+    event: number
 }

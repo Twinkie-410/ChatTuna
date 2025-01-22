@@ -1,6 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react"
 import { customFetchBase } from "./customFetchBase"
-import { IEvent, IRegistrationEvent } from "../../models/IEvent"
+import { IEvent, IEventGetUsers, IRegistrationEvent } from "../../models/IEvent"
 
 const url = 'event'
 
@@ -20,6 +20,11 @@ export const EventAPI = createApi({
                 url:`${url}/detail/${id}`,
             })
         }),
+        getUsersOfEvent: build.query<IEventGetUsers[], number>({
+            query: (id) => ({
+                url:`${url}/${id}/users`,
+            })
+        }),
         getEventsList: build.query<IEvent[], void>({
             query: () => ({
                 url:`${url}/list/`,
@@ -31,5 +36,6 @@ export const EventAPI = createApi({
 export const {
     useCreateEventMutation,
     useGetEventDetailQuery,
-    useGetEventsListQuery
+    useGetEventsListQuery,
+    useGetUsersOfEventQuery
 } = EventAPI
