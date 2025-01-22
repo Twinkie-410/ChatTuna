@@ -1,19 +1,20 @@
 import { useNavigate } from "react-router-dom"
 import { IEvent } from "../../models/IEvent";
+import { formatDateISO } from "../../functions/formatISODate";
 
 interface ObjectCardProps extends IEvent {}
 
 
-function ObjectCard({name, datetime_start, address, organizer, free_places, places}: ObjectCardProps) {
+function ObjectCard({name, datetime_start, address, organizer, free_places, places, id}: ObjectCardProps) {
 
     const navigate = useNavigate()
-    // const handleClick = () => {
-    //     navigate(`/calculation/${id}`)
-    // }
+    const handleClick = () => {
+        navigate(`/event/${id}`)
+    }
 
     return (
         <>
-            <div className="max-w-[640px] w-[640px] bg-[#D0DADF] mt-[20px] rounded-md border-[2px] hover:border-[#454F55]">
+            <div onClick={handleClick} className="max-w-[640px] w-[640px] bg-[#D0DADF] mt-[20px] rounded-md border-[2px] hover:border-[#454F55]">
                 <div className="p-[12px]">
                     <div className="flex flex-row bg-[#FFFFFF] rounded-md text-xl px-1 gap-[10px]">
                         <ul>
@@ -38,7 +39,7 @@ function ObjectCard({name, datetime_start, address, organizer, free_places, plac
                                 <span>{name? name: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{datetime_start? datetime_start: 'Нет данных'}</span>
+                                <span>{datetime_start? formatDateISO(datetime_start): 'Нет данных'}</span>
                             </li>
                             <li>
                                 <span>{address? address: 'Нет данных'}</span>
