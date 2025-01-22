@@ -2,7 +2,7 @@ import { createApi } from "@reduxjs/toolkit/query/react"
 import { customFetchBase } from "./customFetchBase"
 import { INotification } from "../../models/INotification"
 
-const url = 'notofication'
+const url = 'notification'
 
 export const NotificationAPI = createApi({
     reducerPath:'NotificationAPI',
