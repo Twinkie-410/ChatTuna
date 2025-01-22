@@ -11,5 +11,5 @@ class TGUser(models.Model):
         return f"{self.external_id} {self.username}"
 
     class Meta:
-        verbose_name = "Пользователь"
-        verbose_name_plural = "Пользователи"
+        verbose_name = "ТГ-Пользователь"
+        verbose_name_plural = "ТГ-Пользователи"

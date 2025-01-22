@@ -23,6 +23,7 @@ class Event(models.Model):
 
     class Meta:
         verbose_name = "Мероприятие"
+        verbose_name_plural = "Мероприятия"
 
     @property
     async def booked_places(self):
