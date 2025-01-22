@@ -3,11 +3,16 @@ import Footer from "../base/Footer";
 import Header from "../base/Header";
 import { useGetEventsListQuery } from "../../store/apis/EventAPI";
 import RadioEventsList from "../elements/RadioEventsList";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomCheckbox from "../base/CustomCheckbox";
 import { useNavigate } from "react-router-dom";
+import { useSendNotificationMutation } from "../../store/apis/NotificationsAPI";
+
+interface INotificationForm {
+    text: string
+}
 
 function SendNotification() {
 
@@ -16,13 +21,24 @@ function SendNotification() {
     const [openList, setOpenList] = useState(false)
     const [startDate, setStartDate] = useState<Date | null>(null)
 
-    const {register, handleSubmit, control} = useForm()
+    const {register, handleSubmit, control} = useForm<INotificationForm>()
     const navigate = useNavigate()
 
+    const [sendNotification] = useSendNotificationMutation()
 
     function handleClick(e: React.MouseEvent<HTMLButtonElement>, option: boolean, setOption: React.Dispatch<React.SetStateAction<boolean>>) {
         e.preventDefault()
         setOption(!option)
+    }
+
+    const submit:SubmitHandler<INotificationForm> = async (data) => {
+        console.log(data);
+        const eventId = events?.find(event => event.name === eventSelected)?.id as number
+        console.log(eventId);
+        
+        const result = await sendNotification({text: data.text, event:eventId})
+
+        if (result) return navigate('/')
     }
 
     return (  
@@ -31,9 +47,9 @@ function SendNotification() {
             <div className="max-w-[850px] w-[850px] mx-auto flex-grow flex-shrink">
                 <div className="flex flex-col gap-[32px] mt-[32px]">
                     <h1>Создание рассылки</h1>
-                    <form className="flex justify-between">
+                    <form className="flex justify-between" onSubmit={handleSubmit(submit)}>
                         <div className="flex gap-[14px] flex-col">
-                            <textarea placeholder="Текст рассылки*" className="py-[8px] px-[22px] text-[#454F55] bg-[#EBEBEB] rounded-md w-[510px]"/>
+                            <textarea {...register('text', ({required: true}))} placeholder="Текст рассылки*" className="py-[8px] px-[22px] text-[#454F55] bg-[#EBEBEB] rounded-md w-[510px]"/>
                             <div className="">
                                 <button className="flex items-center text-[20px] gap-[8px] ml-auto bg-[#EBEBEB] rounded-md px-[7px] w-[510px] justify-between"
                                 onClick={(e) => handleClick(e, openList, setOpenList)}>
@@ -48,37 +64,32 @@ function SendNotification() {
                                 </div>
                             </div>
                             <label className="w-[50%]">
-                                    <Controller
-                                        control={control}
-                                        name='datetime_start'
-                                        render={() => (
-                                        <DatePicker
-                                            showIcon
-                                            selected={startDate}
-                                            onChange={(date) => setStartDate(date)}
-                                            showTimeSelect
-                                            timeFormat="HH:mm"
-                                            timeIntervals={15}
-                                            dateFormat="DD/MM/YYYY HH:mm"
-                                            icon={
-                                                <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                                    <rect width="26" height="26" rx="7" transform="matrix(-1 0 0 1 26.8887 0)" fill="#9AA8B0"/>
-                                                    <rect width="2.2807" height="13.2281" rx="1.14035" transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 23.1553 9.35938)" fill="white"/>
-                                                    <rect x="4.43457" y="9.35938" width="2.2807" height="13.2281" rx="1.14035" transform="rotate(-45 4.43457 9.35938)" fill="white"/>
-                                                </svg>
-                                            }
-                                            placeholderText="Дата"
-                                            className="bg-[#EBEBEB] rounded-md w-[274px] pl-[300px]"
-                                        />
-                                        )}
-                                    />                           
+                                <DatePicker
+                                    showIcon
+                                    selected={startDate}
+                                    onChange={(date) => setStartDate(date)}
+                                    showTimeSelect
+                                    timeFormat="HH:mm"
+                                    timeIntervals={15}
+                                    dateFormat="DD/MM/YYYY HH:mm"
+                                    icon={
+                                        <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect width="26" height="26" rx="7" transform="matrix(-1 0 0 1 26.8887 0)" fill="#9AA8B0"/>
+                                            <rect width="2.2807" height="13.2281" rx="1.14035" transform="matrix(-0.707107 -0.707107 -0.707107 0.707107 23.1553 9.35938)" fill="white"/>
+                                            <rect x="4.43457" y="9.35938" width="2.2807" height="13.2281" rx="1.14035" transform="rotate(-45 4.43457 9.35938)" fill="white"/>
+                                        </svg>
+                                    }
+                                    placeholderText="Дата"
+                                    className="bg-[#EBEBEB] rounded-md w-[274px] pl-[300px]"
+                                />
                             </label>
                             <CustomCheckbox label="Отправить сейчас"/>
                             <div className="flex justify-between pb-[40px] items-center">
                                 <button onClick={() => navigate('/')} className="bg-[#D0D4D9] disabled:bg-[#bce4f0] px-[18px] py-[5px] rounded-md flex-grow max-w-[134px] text-center border-[1px] hover:border-gray-700">
                                     Отмена                               
                                 </button>
-                                <button type="submit" className="bg-[#9AA8B0] disabled:bg-[#bce4f0] px-[18px] py-[5px] rounded-md flex-grow max-w-[202px] text-center border-[1px] hover:border-gray-700">
+                                <button type="submit" className="bg-[#9AA8B0] disabled:bg-[#bce4f0] px-[18px] py-[5px] rounded-md flex-grow max-w-[202px] text-center border-[1px] hover:border-gray-700" 
+                                disabled={eventSelected === ''}>
                                     Сохранить                                
                                 </button>
                             </div>

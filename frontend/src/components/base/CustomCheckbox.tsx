@@ -5,7 +5,7 @@ interface CustomCheckboxProps {
     id?: string;
 }
 
-const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ label, id = 'custom-checkbox' }) => {
+const CustomCheckbox: React.FC<CustomCheckboxProps> = ({ label, id = label }) => {
     const [checked, setChecked] = useState<boolean>(false);
 
     const handleCheckboxChange = () => {
