@@ -1,4 +1,3 @@
-import { ITgUser } from "../../models/IAuth";
 import { IEventGetUsers } from "../../models/IEvent";
 import TableSection from "./TableSection";
 import UsersTableHeader from "./UsersTableHeader";

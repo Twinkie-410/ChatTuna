@@ -20,7 +20,6 @@ function Event() {
 
     useEffect(() =>{
         getData(id)
-        // useGetUsersOfEventQuery(Number(id))
     }, [])
 
     if (data === undefined && isError ) {
@@ -29,7 +28,6 @@ function Event() {
         
     async function getData(id: string) {
         const responseData = await useGetEventDetailQuery(Number(id))
-        const usersData = await useGetUsersOfEventQuery(Number(id))
         return responseData
     }
 

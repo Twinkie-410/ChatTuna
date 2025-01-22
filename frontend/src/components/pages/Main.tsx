@@ -19,7 +19,7 @@ function Main() {
                     <Search/>
                 </div>
                 <div className="flex flex-row flex-wrap justify-between">
-                    {events && events.slice(0).reverse().map((e, index) => (
+                    {events && events.slice(0).reverse().map((e) => (
                         <ObjectCard
                             {...e}
                             key={e.id}
