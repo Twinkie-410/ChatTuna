@@ -14,14 +14,12 @@ export interface IUser {
     age: number
 }
 
-export interface ITgUser extends IUser {
-    username: string
-    email?: string
-    date_joined?: string
-    is_admin?: boolean
-    is_staff?: boolean
-    is_active?: boolean
-    is_verified?: boolean
+export interface ITgUser {
+    id?: number
+    external_id: number
+    first_name: string
+    username:string
+    age: number
 }
 
 export interface IAdmin {

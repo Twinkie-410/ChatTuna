@@ -1,15 +1,30 @@
+import { IEventGetUsers } from "../../models/IEvent";
+import TableSection from "./TableSection";
 import UsersTableHeader from "./UsersTableHeader";
 
-function UsersListTable() {
+
+interface Props {
+    data: IEventGetUsers[] | undefined
+}
+
+function UsersListTable(data : Props) {
+
+    console.log(data);
+    
     return ( 
-        <div className="mx-auto w-[100%] table border-spacing-y-[3px] h-fit">
-            <UsersTableHeader />
-            {/* {section.sections.map(e => (
-                <TableSectionRow
-                section={e}
-                />
-            ))} */}
-            
+        <div className="">
+            <UsersTableHeader/>
+            {data.data && data.data.map((e, index) => (
+                e.user ? ( // Проверяем наличие e.user
+                    <TableSection
+                        key={index} // Не забудьте добавить ключ для каждого элемента списка
+                        index={index}
+                        username={e.user?.username} // Используем опциональную цепочку
+                        firstName={e.user?.first_name} // Используем опциональную цепочку
+                    />
+                ) : null
+            ))}
+
         </div>
     );
 }

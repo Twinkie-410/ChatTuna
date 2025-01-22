@@ -11,6 +11,7 @@ export const NotificationAPI = createApi({
         sendNotification: build.mutation<INotification, INotification>({
             query: (args) => ({
                 url: `${url}/send/`,
+                method:"POST",
                 body: args
            }) 
         }),

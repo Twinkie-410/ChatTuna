@@ -7,7 +7,7 @@ interface RadioListProps {
     state: string
 }
 
-function RadioObjectsList({array, state, stateFunc} : RadioListProps) {
+function RadioEventsList({array, state, stateFunc} : RadioListProps) {
 
     function handleChange(e: string) {
         stateFunc(e)
@@ -23,9 +23,9 @@ function RadioObjectsList({array, state, stateFunc} : RadioListProps) {
                 checked={state === e.name? true : false}
                 />
             </div> 
-            ))}
+            ))}                                
         </div>
     )
 }
 
-export default RadioObjectsList;
+export default RadioEventsList;

@@ -29,9 +29,9 @@ function Header({first_name, last_name}: HeaderProps) {
                         <svg width="1" height="33" viewBox="0 0 1 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="0.5" x2="0.5" y2="33" stroke="white"/>
                         </svg>
-                        <button className="hover:text-[#97989A]" onClick={() => setModalActive(!modalActive)}>
+                        <NavLink to={'/notification'} className="hover:text-[#97989A]">
                             Создать рассылку
-                        </button>
+                        </NavLink>
                         <svg width="1" height="33" viewBox="0 0 1 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                             <line x1="0.5" x2="0.5" y2="33" stroke="white"/>
                         </svg>
