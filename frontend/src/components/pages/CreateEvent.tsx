@@ -72,7 +72,7 @@ function CreateEvent() {
                                     <Controller
                                         control={control}
                                         name='datetime_start'
-                                        render={({ field }) => (
+                                        render={() => (
                                         <DatePicker
                                             showIcon
                                             selected={startDate}
@@ -98,7 +98,7 @@ function CreateEvent() {
                                     <Controller
                                         control={control}
                                         name='datetime_end'
-                                        render={({ field }) => (
+                                        render={() => (
                                         <DatePicker
                                             showIcon
                                             selected={endDate}

@@ -16,7 +16,7 @@ function ObjectCard({name, datetime_start, address, organizer, free_places, plac
         <>
             <div onClick={handleClick} className="max-w-[640px] w-[640px] bg-[#D0DADF] mt-[20px] rounded-md border-[2px] hover:border-[#454F55]">
                 <div className="p-[12px]">
-                    <div className="flex flex-row bg-[#FFFFFF] rounded-md text-xl px-1 gap-[10px]">
+                    <div className="flex flex-row bg-[#FFFFFF] rounded-md text-xl px-1 gap-[10px] text-ellipsis">
                         <ul>
                             <li>
                                 <span>Название:</span>
@@ -34,21 +34,21 @@ function ObjectCard({name, datetime_start, address, organizer, free_places, plac
                                 <span>Количество мест:</span>
                             </li>
                         </ul>
-                        <ul className="bg-[#FFFFFF] rounded-md px-1">
+                        <ul className="bg-[#FFFFFF] rounded-md px-1 max-w-[70%]">
                             <li>
-                                <span>{name? name: 'Нет данных'}</span>
+                                <span className="line-clamp-1">{name? name: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{datetime_start? formatDateISO(datetime_start): 'Нет данных'}</span>
+                                <span className="line-clamp-1">{datetime_start? formatDateISO(datetime_start): 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{address? address: 'Нет данных'}</span>
+                                <span className="line-clamp-1">{address? address: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{organizer? organizer: 'Нет данных'}</span>
+                                <span className="line-clamp-1">{organizer? organizer: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{free_places}/{places}</span>
+                                <span className="line-clamp-1">{free_places}/{places}</span>
                             </li>
                         </ul>
                     </div>
