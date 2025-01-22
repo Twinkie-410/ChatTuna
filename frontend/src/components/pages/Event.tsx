@@ -23,7 +23,6 @@ function Event() {
         return
     } 
     const {data, isError} = useGetEventDetailQuery(Number(id))
-    // const [distributeInputs] = useDistributeInputsMutation()
 
     useEffect(() =>{
         getData(id)

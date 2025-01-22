@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom"
 import { IEvent } from "../../models/IEvent";
+import { formatDateISO } from "../../functions/formatISODate";
 
 interface ObjectCardProps extends IEvent {}
 
@@ -38,7 +39,7 @@ function ObjectCard({name, datetime_start, address, organizer, free_places, plac
                                 <span>{name? name: 'Нет данных'}</span>
                             </li>
                             <li>
-                                <span>{datetime_start? datetime_start: 'Нет данных'}</span>
+                                <span>{datetime_start? formatDateISO(datetime_start): 'Нет данных'}</span>
                             </li>
                             <li>
                                 <span>{address? address: 'Нет данных'}</span>
