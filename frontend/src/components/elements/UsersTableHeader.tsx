@@ -4,8 +4,9 @@ function UsersTableHeader() {
             <div className="border-r-black border-r px-[9px] max-h-[6px] table-cell align-middle bg-[#9AA8B0] rounded-l-md">
                 №
             </div>
-            <div className="border-r-black border-r px-[150px] table-cell align-middle bg-[#9AA8B0] max-h-[6px] whitespace-nowrap">Имя участника</div>
-            <div className=" px-[100px] table-cell align-middle bg-[#9AA8B0] rounded-r-md max-h-[6px] whitespace-nowrap">
+            <div className="border-r-black border-r px-[70px] table-cell align-middle bg-[#9AA8B0] max-h-[6px] whitespace-nowrap">Имя участника</div>
+            <div className="border-r-black border-r px-[150px] table-cell align-middle bg-[#9AA8B0] max-h-[6px] whitespace-nowrap">Работа</div>
+            <div className=" px-[70px] table-cell align-middle bg-[#9AA8B0] rounded-r-md max-h-[6px] whitespace-nowrap">
                 <div className="">
                     Номер телефона /
                 </div>
