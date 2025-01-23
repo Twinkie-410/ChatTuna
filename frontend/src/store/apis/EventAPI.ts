@@ -46,6 +46,14 @@ export const EventAPI = createApi({
            }),
            invalidatesTags:['Event']
         }),
+        deleteEvent: build.mutation<IEvent, number>({
+            query: (args) => ({
+                url: `${url}/detail/${args}/`,
+                method:'DELETE',
+                body: args
+           }),
+           invalidatesTags:['Event']
+        }),
     })
 })
 
@@ -54,5 +62,6 @@ export const {
     useGetEventDetailQuery,
     useGetEventsListQuery,
     useGetUsersOfEventQuery,
-    useUpdateEventMutation
+    useUpdateEventMutation,
+    useDeleteEventMutation
 } = EventAPI

@@ -3,7 +3,7 @@ import Footer from "../base/Footer";
 import Header from "../base/Header";
 import { useGetEventsListQuery } from "../../store/apis/EventAPI";
 import RadioEventsList from "../elements/RadioEventsList";
-import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { SubmitHandler, useForm } from "react-hook-form";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import CustomCheckbox from "../base/CustomCheckbox";

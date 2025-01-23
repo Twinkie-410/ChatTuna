@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import Footer from "../base/Footer";
 import Header from "../base/Header";
 import { useNavigate, useParams } from "react-router-dom";
-import { useGetEventDetailQuery, useGetUsersOfEventQuery } from "../../store/apis/EventAPI";
+import { useDeleteEventMutation, useGetEventDetailQuery, useGetUsersOfEventQuery } from "../../store/apis/EventAPI";
 import UsersListTable from "../elements/UsersListTable";
 import { formatDateISO } from "../../functions/formatISODate";
 
@@ -18,6 +18,8 @@ function Event() {
     const {data, isError} = useGetEventDetailQuery(Number(id))
     const {data: usersData} = useGetUsersOfEventQuery(Number(id))
 
+    const [deleteEvent] = useDeleteEventMutation()
+
     useEffect(() =>{
         getData(id)
     }, [])
@@ -29,6 +31,12 @@ function Event() {
     async function getData(id: string) {
         const responseData = await useGetEventDetailQuery(Number(id))
         return responseData
+    }
+
+    async function handleDelete(id: number) {
+        const result = await deleteEvent(id)
+
+        if (result) return navigate('/')
     }
 
     return (data) && ( 
@@ -55,9 +63,15 @@ function Event() {
                             <li>Дата: {formatDateISO(data.datetime_start)}</li>
                             <li>Адрес проведения: {data.address? data.address: 'Нет адреса'}</li>
                         </ul>
-                        <button onClick={() => navigate(`/event/${id}/update`)} className="bg-[#9AA8B0] disabled:bg-[#bce4f0] px-[18px] py-[10px] rounded-md flex-grow max-w-[202px] text-center border-[1px] hover:border-gray-700">
-                            Редактировать                             
-                        </button>
+                        <div className="flex gap-[20px]">
+                            <button onClick={() => handleDelete(Number(id))} className="bg-red-700 text-white disabled:bg-[#bce4f0] px-[18px] py-[10px] rounded-md flex-grow max-w-[202px] text-center border-[1px] hover:border-gray-700">
+                                Удалить                            
+                            </button>
+                            <button onClick={() => navigate(`/event/${id}/update`)} className="bg-[#9AA8B0] disabled:bg-[#bce4f0] px-[18px] py-[10px] rounded-md flex-grow max-w-[202px] text-center border-[1px] hover:border-gray-700">
+                                Редактировать                             
+                            </button>
+                        </div>
+                        
                     </div>
                     <div className="">
                         <UsersListTable
