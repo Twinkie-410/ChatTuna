@@ -118,7 +118,7 @@ function UpdateEvent() {
                                             showTimeSelect
                                             timeFormat="HH:mm"
                                             timeIntervals={15}
-                                            dateFormat="DD/MM/YYYY HH:mm"
+                                            dateFormat="d/MM/YYYY HH:mm"
                                             icon={
                                                 <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <rect width="26" height="26" rx="7" transform="matrix(-1 0 0 1 26.8887 0)" fill="#9AA8B0"/>
@@ -144,7 +144,7 @@ function UpdateEvent() {
                                             showTimeSelect
                                             timeFormat="HH:mm"
                                             timeIntervals={15}
-                                            dateFormat="DD/MM/YYYY HH:mm"
+                                            dateFormat="d/MM/YYYY HH:mm"
                                             icon={
                                                 <svg width="27" height="26" viewBox="0 0 27 26" fill="none" xmlns="http://www.w3.org/2000/svg">
                                                     <rect width="26" height="26" rx="7" transform="matrix(-1 0 0 1 26.8887 0)" fill="#9AA8B0"/>
