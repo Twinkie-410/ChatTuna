@@ -7,15 +7,21 @@ export function formatDateISO(isoDateString: string): string {
         throw new Error('Invalid date string');
     }
 
+    // Получаем смещение по времени в минутах
+    const timezoneOffset = date.getTimezoneOffset();
+
+    // Корректируем дату с учетом часового пояса
+    const localDate = new Date(date.getTime() + (timezoneOffset - 300) * 60000);
+
     // Извлекаем компоненты даты и времени
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0'); // месяцы начинаются с 0
-    const year = date.getFullYear().toString();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const day = String(localDate.getDate()).padStart(2, '0');
+    const month = String(localDate.getMonth() + 1).padStart(2, '0'); // месяцы начинаются с 0
+    const year = localDate.getFullYear().toString();
+    const hours = String(localDate.getHours()).padStart(2, '0');
+    const minutes = String(localDate.getMinutes()).padStart(2, '0');
 
     // Форматируем окончательную строку
-    const formattedDate = `${day}/${month}/${year} ${hours}:${minutes}`;
+    const formattedDate = `${day}.${month}.${year} ${hours}:${minutes}`;
     
     return formattedDate;
 }
