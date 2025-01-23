@@ -55,6 +55,9 @@ function Event() {
                             <li>Дата: {formatDateISO(data.datetime_start)}</li>
                             <li>Адрес проведения: {data.address? data.address: 'Нет адреса'}</li>
                         </ul>
+                        <button onClick={() => navigate(`/event/${id}/update`)} className="bg-[#9AA8B0] disabled:bg-[#bce4f0] px-[18px] py-[10px] rounded-md flex-grow max-w-[202px] text-center border-[1px] hover:border-gray-700">
+                            Редактировать                             
+                        </button>
                     </div>
                     <div className="">
                         <UsersListTable

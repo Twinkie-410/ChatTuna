@@ -8,6 +8,7 @@ import {LoginGuard} from './hocs/LoginGuard';
 import CreateEvent from './components/pages/CreateEvent';
 import ConfigureBot from './components/pages/ConfigureBot';
 import SendNotification from './components/pages/SendNotification';
+import UpdateEvent from './components/pages/UpdateEvent';
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Route path='/createEvent' element={<CreateEvent />} />
             <Route path='/configureBot' element={<ConfigureBot />} />
             <Route path='/event/:id' element={<Event />} />
+            <Route path='/event/:id/update' element={<UpdateEvent />} />
             <Route path='/notification' element={<SendNotification />} />
           </Route>
         </Route>
