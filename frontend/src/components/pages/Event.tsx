@@ -36,7 +36,7 @@ function Event() {
             <Header/>
             <div className="max-w-[1740px] w-[100%] mx-auto mt-[48px] flex-grow flex flex-col gap-[14px]">
                 <h1 className="text-[24px]">Мероприятие {data.name}</h1>
-                <div className="flex gap-[5px] mt-[25px] justify-between text-[20px]">
+                <div className="flex gap-[20px] mt-[25px] justify-between text-[20px]">
                     <div className="flex flex-col gap-[25px]">
                         <div className="flex flex-row gap-[36px]">
                             <svg width="237" height="144" viewBox="0 0 237 144" fill="none" xmlns="http://www.w3.org/2000/svg">
